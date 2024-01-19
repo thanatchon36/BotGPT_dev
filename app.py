@@ -198,7 +198,7 @@ if st.session_state["authentication_status"]:
                         feedback_radio_1 = st.radio(
                                             "Please give us feedback!",
                                             feedback_options,
-                                            key='radio_2_' + message['turn_id'],
+                                            key='radio_1_' + message['turn_id'],
                                         )
                         if feedback_radio_1 != '...':
                             csv_file = f"data/feedback.csv"
@@ -229,7 +229,7 @@ if st.session_state["authentication_status"]:
                         feedback_radio_2 = st.radio(
                                             "",
                                             feedback_options,
-                                            key='radio_1_' + message['turn_id'],
+                                            key='radio_2_' + message['turn_id'],
                                         )
                         if feedback_radio_2 != '...':
                             csv_file = f"data/feedback.csv"
