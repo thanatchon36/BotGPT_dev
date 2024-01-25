@@ -187,7 +187,7 @@ if st.session_state["authentication_status"]:
                     st.markdown(message["raw_content"])
                 else:
                     st.markdown(message["content"])
-                    col1, col2 = st.columns(2)
+                    col1, col2, col3 = st.columns(3)
                     with col1:
                         feedback_options = ["...",
                                             "😄", 
@@ -196,7 +196,7 @@ if st.session_state["authentication_status"]:
                                             "🙁",
                                             ]
                         feedback_radio_1 = st.radio(
-                                            "Please give us feedback!",
+                                            "ความพึงพอใจในการใช้งาน:",
                                             feedback_options,
                                             key='radio_1_' + message['turn_id'],
                                         )
@@ -214,11 +214,10 @@ if st.session_state["authentication_status"]:
                     with col2:
                         if context_radio == 'ข้อมูลประกาศ':
                             feedback_options = ["...",
-                                                "เลือกประกาศผิด",
-                                                "ประกาศตรงคำถามบางส่วน ไม่สามารถตอบคำถามได้ทั้งหมด",
-                                                "เลือกประกาศถูก แต่ตอบไม่ครบถ้วน",
-                                                "เลือกประกาศถูก แต่ตอบผิด",
-                                                "ตอบถูก"]
+                                                "คำตอบถูกต้องครบถ้วน",
+                                                "คำตอบถูกต้องบางส่วน",
+                                                "คำตอบไม่ถูกต้อง",
+                                                "คำตอบไม่เกี่ยวข้องกับคำถาม"]
                         elif context_radio == 'Datacube':
                             feedback_options = ["...",
                                                 "เลือก field ผิด",
@@ -227,7 +226,7 @@ if st.session_state["authentication_status"]:
                                                 "เลือก field ถูกแต่ SQL syntax ผิด",
                                                 "ผลลัพธ์ถูกต้อง"]
                         feedback_radio_2 = st.radio(
-                                            "",
+                                            "ความถูกต้องของคำตอบ:",
                                             feedback_options,
                                             key='radio_2_' + message['turn_id'],
                                         )
@@ -242,6 +241,29 @@ if st.session_state["authentication_status"]:
                                 writer = csv.writer(file)
                                 writer.writerow([st.session_state.username, st.session_state.chat_id, message['turn_id'], feedback_radio_2,])
                             st.success("Thanks! Your valuable feedback is updated in the database.")
+                    if context_radio == 'ข้อมูลประกาศ':
+                        with col3:
+                            feedback_options = ["...",
+                                                "ประกาศถูกต้อง",
+                                                "ประกาศถูกต้องแต่ไม่ใช่ฉบับล่าสุด",
+                                                "ประกาศไม่สามารถตอบคำถามได้ครบถ้วน",
+                                                "ประกาศไม่เกี่ยวข้องกับคำถาม"]
+                            feedback_radio_3 = st.radio(
+                                                "ความถูกต้องของการอ้างอิงประกาศ:",
+                                                feedback_options,
+                                                key='radio_3_' + message['turn_id'],
+                                            )
+                            if feedback_radio_3 != '...':
+                                csv_file = f"data/feedback.csv"
+                                file_exists = os.path.isfile(csv_file)
+                                if not file_exists:
+                                    with open(csv_file, mode='a', newline='') as file:
+                                        writer = csv.writer(file)
+                                        writer.writerow(['username','chat_id','turn_id','feedback_text'])
+                                with open(csv_file, mode='a', newline='') as file:
+                                    writer = csv.writer(file)
+                                    writer.writerow([st.session_state.username, st.session_state.chat_id, message['turn_id'], feedback_radio_3,])
+                                st.success("Thanks! Your valuable feedback is updated in the database.")
         else:
             with st.chat_message(message["role"], avatar = user_image):
                 if dev_checkbox == False:
