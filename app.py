@@ -330,3 +330,8 @@ if st.session_state["authentication_status"]:
                 st.session_state.context.append({"role": "system", "content": raw_output})
 
                 st.rerun()
+                
+elif st.session_state["authentication_status"] == False:
+    st.error("Username/password is incorrect. If you encounter any issues related to user login, please contact Thanatchon Chongmankhong at thanatcc@bot.or.th.")
+elif st.session_state["authentication_status"] == None:
+    st.warning('Please enter your username and password. If you encounter any issues related to user login, please contact Thanatchon Chongmankhong at thanatcc@bot.or.th.')
