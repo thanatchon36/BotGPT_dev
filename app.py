@@ -13,7 +13,7 @@ import requests
 
 def get_response(prompt, context = []):
     start_time = time.time()
-    api_route = 'botgpt_query'
+    api_route = 'botgpt_query_dev'
     post_params = {'prompt': f"{prompt}",
                    'context': context,
                 }
@@ -24,7 +24,7 @@ def get_response(prompt, context = []):
 
 def get_response_2(prompt, context = []):
     start_time = time.time()
-    api_route = 'botgpt_query'
+    api_route = 'botgpt_query_dev'
     post_params = {'prompt': f"{prompt}",
                    'context': context,
                 }
