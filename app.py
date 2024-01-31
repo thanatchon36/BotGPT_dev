@@ -11,29 +11,31 @@ import yaml
 from yaml.loader import SafeLoader
 import requests
 
-def get_response(prompt, context = []):
+def get_response(prompt, temperature, context = []):
     start_time = time.time()
     api_route = 'botgpt_query_dev'
     post_params = {'prompt': f"{prompt}",
                    'context': context,
+                   'temperature': temperature,
                 }
     res = requests.post(f'https://pc140032646.bot.or.th/{api_route}', json = post_params, verify="/DA_WORKSPACE/GLOBAL_WS/ssl_cer/WS2B/pc140032646.bot.or.th.pem")
     execution_time = time.time() - start_time
     execution_time = round(execution_time, 2)
     return {'response': res.json()['response'], 'raw_input': res.json()['raw_input'], 'raw_output': res.json()['raw_output'], 'engine': res.json()['engine'], 'frontend_query_time': execution_time, 'backend_query_time': res.json()['query_time_sec']}
 
-def get_response_2(prompt, context = []):
+def get_response_2(prompt, temperature, context = []):
     start_time = time.time()
     api_route = 'botgpt_query_dev'
     post_params = {'prompt': f"{prompt}",
                    'context': context,
+                   'temperature': temperature,
                 }
     res = requests.post(f'https://pc140032645.bot.or.th/{api_route}', json = post_params, verify="/DA_WORKSPACE/GLOBAL_WS/ssl_cer/WS2A/pc140032645.bot.or.th.pem")
     execution_time = time.time() - start_time
     execution_time = round(execution_time, 2)
     return {'response': res.json()['response'], 'raw_input': res.json()['raw_input'], 'raw_output': res.json()['raw_output'], 'engine': res.json()['engine'], 'frontend_query_time': execution_time, 'backend_query_time': res.json()['query_time_sec']}
 
-def get_response_dev(prompt, context = []):
+def get_response_dev(prompt, temperature, context = []):
     start_time = time.time()
     time.sleep(3)
     execution_time = time.time() - start_time
@@ -98,6 +100,11 @@ if st.session_state["authentication_status"]:
             ["ข้อมูลประกาศ", "Datacube"],
         )
 
+        temperature_value = st.slider(
+                'Select a temperature',
+                0.0, 1.0, 0.9, step=0.05
+                )
+        
         dev_checkbox = st.checkbox('Development')
         
         csv_file = f"data/{st.session_state.username}.csv"
@@ -295,7 +302,7 @@ if st.session_state["authentication_status"]:
 
                 with st.spinner('Thinking...'):
                     if context_radio == 'ข้อมูลประกาศ':
-                        response_dict = get_response(prompt, context = st.session_state.context)
+                        response_dict = get_response(prompt, temperature_value, context = st.session_state.context)
                         response = response_dict['response']
                         raw_input = response_dict['raw_input']
                         raw_output = response_dict['raw_output']
@@ -303,7 +310,7 @@ if st.session_state["authentication_status"]:
                         frontend_query_time = response_dict['frontend_query_time']
                         backend_query_time = response_dict['backend_query_time']
                     elif context_radio == 'Datacube':
-                        response_dict = get_response_2(prompt, context = st.session_state.context)
+                        response_dict = get_response_2(prompt, temperature_value, context = st.session_state.context)
                         response = response_dict['response']
                         raw_input = response_dict['raw_input']
                         raw_output = response_dict['raw_output']
