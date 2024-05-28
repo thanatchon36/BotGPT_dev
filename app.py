@@ -206,7 +206,7 @@ if st.session_state["authentication_status"]:
                                             # st.chat_message("user", avatar = user_image).write(each_dict['content'])
                                         else:
                                             response = f"{each_dict['name']}: {each_dict['content']}"
-                                            st.session_state.messages.append({"role": "assistant", "content": response, "chat_id": chat_id, "turn_id":  str(i),
+                                            st.session_state.messages.append({"role": "assistant", "content": response, "chat_id": chat_id, "turn_id":  chat_id + '_' + str(i),
                                                                             "raw_content": "",
                                                                             })
                                             st.session_state.context.append({"role": "system", "content": ""})
@@ -465,7 +465,7 @@ if st.session_state["authentication_status"]:
                                         message_placeholder.markdown(full_response + "▌")
                                         full_response += chunk + "  \n" 
                                         message_placeholder.markdown(full_response)
-                                st.session_state.messages.append({"role": "assistant", "content": response, "chat_id": st.session_state.chat_id, "turn_id":  str(i),
+                                st.session_state.messages.append({"role": "assistant", "content": response, "chat_id": st.session_state.chat_id, "turn_id":  st.session_state.chat_id + '_' + str(i),
                                                                 "raw_content": "",
                                                                 })
                                 st.session_state.context.append({"role": "system", "content": ""})
