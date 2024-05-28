@@ -277,7 +277,7 @@ if st.session_state["authentication_status"]:
                         feedback_radio_1 = st.radio(
                                             "ความพึงพอใจในการใช้งาน:",
                                             feedback_options,
-                                            key='radio_1_' + message['turn_id'],
+                                            key='radio_1_' + str(st.session_state.chat_id) + message['turn_id'],
                                         )
                         if feedback_radio_1 != '...':
                             csv_file = f"data/feedback.csv"
@@ -307,7 +307,7 @@ if st.session_state["authentication_status"]:
                         feedback_radio_2 = st.radio(
                                             "ความถูกต้องของคำตอบ:",
                                             feedback_options,
-                                            key='radio_2_' + message['turn_id'],
+                                            key='radio_2_' + str(st.session_state.chat_id) + message['turn_id'],
                                         )
                         if feedback_radio_2 != '...':
                             csv_file = f"data/feedback.csv"
@@ -331,7 +331,7 @@ if st.session_state["authentication_status"]:
                             feedback_radio_3 = st.radio(
                                                 "ความถูกต้องของการอ้างอิงประกาศ:",
                                                 feedback_options,
-                                                key='radio_3_' + message['turn_id'],
+                                                key='radio_3_' + str(st.session_state.chat_id) + message['turn_id'],
                                             )
                             if feedback_radio_3 != '...':
                                 csv_file = f"data/feedback.csv"
