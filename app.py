@@ -306,6 +306,13 @@ if st.session_state["authentication_status"]:
                                                 "เลือก field ถูกแต่ SQL ไม่ตอบโจทย์",
                                                 "เลือก field ถูกแต่ SQL syntax ผิด",
                                                 "ผลลัพธ์ถูกต้อง"]
+                        elif context_radio == 'Autogen':
+                            feedback_options = ["...",
+                                                "เลือก field ผิด",
+                                                "เลือก field ถูกแต่ไม่ครบถ้วน",
+                                                "เลือก field ถูกแต่ SQL ไม่ตอบโจทย์",
+                                                "เลือก field ถูกแต่ SQL syntax ผิด",
+                                                "ผลลัพธ์ถูกต้อง"]
                         feedback_radio_2 = st.radio(
                                             "ความถูกต้องของคำตอบ:",
                                             feedback_options,
