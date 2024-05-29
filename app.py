@@ -261,7 +261,7 @@ if st.session_state["authentication_status"]:
         st.session_state.context = []
 
     # Display chat messages from history on app rerun
-    for message in st.session_state.messages:
+    for message_i, message in enumerate(st.session_state.messages):
         if message["role"] == "assistant":
             with st.chat_message(message["role"], avatar = bot_image_2):
                 if dev_checkbox:
@@ -279,9 +279,10 @@ if st.session_state["authentication_status"]:
                         feedback_radio_1 = st.radio(
                                             "ความพึงพอใจในการใช้งาน:",
                                             feedback_options,
-                                            key='radio_1_' + str(random.random()) + message['turn_id'],
+                                            key='radio_1_' + str(message_i) + message['turn_id'],
                                         )
                         if feedback_radio_1 != '...':
+                            st.markdown('test 555')
                             csv_file = f"data/feedback.csv"
                             file_exists = os.path.isfile(csv_file)
                             if not file_exists:
@@ -309,7 +310,7 @@ if st.session_state["authentication_status"]:
                         feedback_radio_2 = st.radio(
                                             "ความถูกต้องของคำตอบ:",
                                             feedback_options,
-                                            key='radio_2_' + str(random.random()) + message['turn_id'],
+                                            key='radio_2_' + str(message_i) + message['turn_id'],
                                         )
                         if feedback_radio_2 != '...':
                             csv_file = f"data/feedback.csv"
@@ -333,7 +334,7 @@ if st.session_state["authentication_status"]:
                             feedback_radio_3 = st.radio(
                                                 "ความถูกต้องของการอ้างอิงประกาศ:",
                                                 feedback_options,
-                                                key='radio_3_' + str(random.random()) + message['turn_id'],
+                                                key='radio_3_' + str(message_i) + message['turn_id'],
                                             )
                             if feedback_radio_3 != '...':
                                 csv_file = f"data/feedback.csv"
