@@ -282,7 +282,6 @@ if st.session_state["authentication_status"]:
                                             key='radio_1_' + str(message_i) + message['turn_id'],
                                         )
                         if feedback_radio_1 != '...':
-                            st.markdown('test 555')
                             csv_file = f"data/feedback.csv"
                             file_exists = os.path.isfile(csv_file)
                             if not file_exists:
