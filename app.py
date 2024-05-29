@@ -198,6 +198,7 @@ if st.session_state["authentication_status"]:
                                         st.session_state.context.append({"role": "system", "content": row_2['raw_output']})
                                 else:
                                     history_list = literal_eval(fil_hist_df['history'].values[-1])
+                                    st.session_state.history = history_list
                                     chat_id = fil_hist_df['chat_id'].values[-1]
                                     user_list = ['user_proxy', 'decision_agent', 'loop_agent']
                                     for i, each_dict in enumerate(history_list):
@@ -451,6 +452,10 @@ if st.session_state["authentication_status"]:
                         backend_query_time = 0
                         history_list = response_dict['history']
                         user_list = ['user_proxy', 'decision_agent', 'loop_agent']
+
+                        st.session_state.messages = []
+                        st.session_state.context = []
+                        
                         for i, each_dict in enumerate(history_list):
                             if each_dict['name'].lower() in user_list:
                                 st.chat_message("user", avatar = user_image).write(each_dict['content'])
