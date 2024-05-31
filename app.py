@@ -200,9 +200,8 @@ if st.session_state["authentication_status"]:
                                     history_list = literal_eval(fil_hist_df['history'].values[-1])
                                     st.session_state.history = history_list
                                     chat_id = fil_hist_df['chat_id'].values[-1]
-                                    user_list = ['user_proxy', 'decision_agent', 'loop_agent']
                                     for i, each_dict in enumerate(history_list):
-                                        if each_dict['name'].lower() in user_list:
+                                        if 'user' in each_dict['name'].lower():
                                             st.session_state.messages.append({"role": "user", "content": each_dict['content'], "raw_content": ""})
                                             st.session_state.context.append({"role": "user", "content": ""})
                                             # st.chat_message("user", avatar = user_image).write(each_dict['content'])
@@ -269,66 +268,67 @@ if st.session_state["authentication_status"]:
                 else:
                     st.markdown(message["content"])
                     col1, col2, col3 = st.columns(3)
-                    with col1:
-                        feedback_options = ["...",
-                                            "😄", 
-                                            "🙂",
-                                            "😐",
-                                            "🙁",
-                                            ]
-                        feedback_radio_1 = st.radio(
-                                            "ความพึงพอใจในการใช้งาน:",
-                                            feedback_options,
-                                            key='radio_1_' + str(message_i) + message['turn_id'],
-                                        )
-                        if feedback_radio_1 != '...':
-                            csv_file = f"data/feedback.csv"
-                            file_exists = os.path.isfile(csv_file)
-                            if not file_exists:
+                    if context_radio != 'Autogen':
+                        with col1:
+                            feedback_options = ["...",
+                                                "😄", 
+                                                "🙂",
+                                                "😐",
+                                                "🙁",
+                                                ]
+                            feedback_radio_1 = st.radio(
+                                                "ความพึงพอใจในการใช้งาน:",
+                                                feedback_options,
+                                                key='radio_1_' + str(message_i) + message['turn_id'],
+                                            )
+                            if feedback_radio_1 != '...':
+                                csv_file = f"data/feedback.csv"
+                                file_exists = os.path.isfile(csv_file)
+                                if not file_exists:
+                                    with open(csv_file, mode='a', newline='') as file:
+                                        writer = csv.writer(file)
+                                        writer.writerow(['username','chat_id','turn_id','feedback_text'])
                                 with open(csv_file, mode='a', newline='') as file:
                                     writer = csv.writer(file)
-                                    writer.writerow(['username','chat_id','turn_id','feedback_text'])
-                            with open(csv_file, mode='a', newline='') as file:
-                                writer = csv.writer(file)
-                                writer.writerow([st.session_state.username, st.session_state.chat_id, message['turn_id'], feedback_radio_1,])
-                            st.success("Thanks! Your valuable feedback is updated in the database.")
-                    with col2:
-                        if context_radio == 'ข้อมูลประกาศ':
-                            feedback_options = ["...",
-                                                "คำตอบถูกต้องครบถ้วน",
-                                                "คำตอบถูกต้องบางส่วน",
-                                                "คำตอบไม่ถูกต้อง",
-                                                "คำตอบไม่เกี่ยวข้องกับคำถาม"]
-                        elif context_radio == 'Datacube':
-                            feedback_options = ["...",
-                                                "เลือก field ผิด",
-                                                "เลือก field ถูกแต่ไม่ครบถ้วน",
-                                                "เลือก field ถูกแต่ SQL ไม่ตอบโจทย์",
-                                                "เลือก field ถูกแต่ SQL syntax ผิด",
-                                                "ผลลัพธ์ถูกต้อง"]
-                        elif context_radio == 'Autogen':
-                            feedback_options = ["...",
-                                                "เลือก field ผิด",
-                                                "เลือก field ถูกแต่ไม่ครบถ้วน",
-                                                "เลือก field ถูกแต่ SQL ไม่ตอบโจทย์",
-                                                "เลือก field ถูกแต่ SQL syntax ผิด",
-                                                "ผลลัพธ์ถูกต้อง"]
-                        feedback_radio_2 = st.radio(
-                                            "ความถูกต้องของคำตอบ:",
-                                            feedback_options,
-                                            key='radio_2_' + str(message_i) + message['turn_id'],
-                                        )
-                        if feedback_radio_2 != '...':
-                            csv_file = f"data/feedback.csv"
-                            file_exists = os.path.isfile(csv_file)
-                            if not file_exists:
+                                    writer.writerow([st.session_state.username, st.session_state.chat_id, message['turn_id'], feedback_radio_1,])
+                                st.success("Thanks! Your valuable feedback is updated in the database.")
+                        with col2:
+                            if context_radio == 'ข้อมูลประกาศ':
+                                feedback_options = ["...",
+                                                    "คำตอบถูกต้องครบถ้วน",
+                                                    "คำตอบถูกต้องบางส่วน",
+                                                    "คำตอบไม่ถูกต้อง",
+                                                    "คำตอบไม่เกี่ยวข้องกับคำถาม"]
+                            elif context_radio == 'Datacube':
+                                feedback_options = ["...",
+                                                    "เลือก field ผิด",
+                                                    "เลือก field ถูกแต่ไม่ครบถ้วน",
+                                                    "เลือก field ถูกแต่ SQL ไม่ตอบโจทย์",
+                                                    "เลือก field ถูกแต่ SQL syntax ผิด",
+                                                    "ผลลัพธ์ถูกต้อง"]
+                            # elif context_radio == 'Autogen':
+                            #     feedback_options = ["...",
+                            #                         "เลือก field ผิด",
+                            #                         "เลือก field ถูกแต่ไม่ครบถ้วน",
+                            #                         "เลือก field ถูกแต่ SQL ไม่ตอบโจทย์",
+                            #                         "เลือก field ถูกแต่ SQL syntax ผิด",
+                            #                         "ผลลัพธ์ถูกต้อง"]
+                            feedback_radio_2 = st.radio(
+                                                "ความถูกต้องของคำตอบ:",
+                                                feedback_options,
+                                                key='radio_2_' + str(message_i) + message['turn_id'],
+                                            )
+                            if feedback_radio_2 != '...':
+                                csv_file = f"data/feedback.csv"
+                                file_exists = os.path.isfile(csv_file)
+                                if not file_exists:
+                                    with open(csv_file, mode='a', newline='') as file:
+                                        writer = csv.writer(file)
+                                        writer.writerow(['username','chat_id','turn_id','feedback_text'])
                                 with open(csv_file, mode='a', newline='') as file:
                                     writer = csv.writer(file)
-                                    writer.writerow(['username','chat_id','turn_id','feedback_text'])
-                            with open(csv_file, mode='a', newline='') as file:
-                                writer = csv.writer(file)
-                                writer.writerow([st.session_state.username, st.session_state.chat_id, message['turn_id'], feedback_radio_2,])
-                            st.success("Thanks! Your valuable feedback is updated in the database.")
+                                    writer.writerow([st.session_state.username, st.session_state.chat_id, message['turn_id'], feedback_radio_2,])
+                                st.success("Thanks! Your valuable feedback is updated in the database.")
                     if context_radio == 'ข้อมูลประกาศ':
                         with col3:
                             feedback_options = ["...",
@@ -458,13 +458,12 @@ if st.session_state["authentication_status"]:
                         frontend_query_time = response_dict['frontend_query_time']
                         backend_query_time = 0
                         history_list = response_dict['history']
-                        user_list = ['user_proxy', 'decision_agent', 'loop_agent']
 
                         st.session_state.messages = []
                         st.session_state.context = []
                         
                         for i, each_dict in enumerate(history_list):
-                            if each_dict['name'].lower() in user_list:
+                            if 'user' in each_dict['name'].lower():
                                 st.chat_message("user", avatar = user_image).write(each_dict['content'])
                                 st.session_state.messages.append({"role": "user", "content": each_dict['content'], "raw_content": ""})
                                 st.session_state.context.append({"role": "user", "content": ""})
