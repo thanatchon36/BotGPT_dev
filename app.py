@@ -484,8 +484,7 @@ if st.session_state["authentication_status"]:
                                 break
                             else:
                                 prompt = " "
-                                history = response_dict['history']
-                                
+
                         # csv_file = f"data/{st.session_state.username}.csv"
                         # file_exists = os.path.isfile(csv_file)
                         # if not file_exists:
