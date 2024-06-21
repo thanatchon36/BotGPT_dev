@@ -121,6 +121,11 @@ authenticator = stauth.Authenticate(
 
 authenticator.login('BotGPT Login', 'main')
 
+button_name_list = ["BOTGPT",
+                    "RDT Copilot - Metadata",
+                    "RDT Copilot - SQL Coder",
+                    ]
+
 if st.session_state["authentication_status"]:
     
     if "chat_id" not in st.session_state:
@@ -144,7 +149,8 @@ if st.session_state["authentication_status"]:
 
         context_radio = st.radio(
             "Context:",
-            ["ข้อมูลประกาศ", "Datacube", "Autogen"],
+            button_name_list
+            # ["button_name_list[0[", "Datacube", "Autogen"],
         )
 
         temperature_value = st.slider(
@@ -188,7 +194,7 @@ if st.session_state["authentication_status"]:
                                 st.session_state.turn_id = row['turn_id']
                                 fil_hist_df = full_hist_df.copy()
                                 fil_hist_df = reset(fil_hist_df[fil_hist_df['chat_id'] == row['chat_id']])
-                                if fil_hist_df['engine'].values[-1] != 'Autogen':
+                                if fil_hist_df['engine'].values[-1] != button_name_list[2]:
                                     for index_2, row_2 in fil_hist_df.iterrows():
                                         st.session_state.messages.append({"role": "user", "content": row_2['user_text'], "raw_content": row_2['raw_input']})
                                         st.session_state.messages.append({"role": "assistant", "content": row_2['generative_text'], "chat_id": row_2['chat_id'], "turn_id":  row_2['turn_id'],
@@ -268,7 +274,7 @@ if st.session_state["authentication_status"]:
                 else:
                     st.markdown(message["content"])
                     col1, col2, col3 = st.columns(3)
-                    if context_radio != 'Autogen':
+                    if context_radio != button_name_list[2]:
                         with col1:
                             feedback_options = ["...",
                                                 "😄", 
@@ -293,20 +299,20 @@ if st.session_state["authentication_status"]:
                                     writer.writerow([st.session_state.username, st.session_state.chat_id, message['turn_id'], feedback_radio_1,])
                                 st.success("Thanks! Your valuable feedback is updated in the database.")
                         with col2:
-                            if context_radio == 'ข้อมูลประกาศ':
+                            if context_radio == button_name_list[0]:
                                 feedback_options = ["...",
                                                     "คำตอบถูกต้องครบถ้วน",
                                                     "คำตอบถูกต้องบางส่วน",
                                                     "คำตอบไม่ถูกต้อง",
                                                     "คำตอบไม่เกี่ยวข้องกับคำถาม"]
-                            elif context_radio == 'Datacube':
+                            elif context_radio == button_name_list[1]:
                                 feedback_options = ["...",
                                                     "เลือก field ผิด",
                                                     "เลือก field ถูกแต่ไม่ครบถ้วน",
                                                     "เลือก field ถูกแต่ SQL ไม่ตอบโจทย์",
                                                     "เลือก field ถูกแต่ SQL syntax ผิด",
                                                     "ผลลัพธ์ถูกต้อง"]
-                            # elif context_radio == 'Autogen':
+                            # elif context_radio == button_name_list[2]:
                             #     feedback_options = ["...",
                             #                         "เลือก field ผิด",
                             #                         "เลือก field ถูกแต่ไม่ครบถ้วน",
@@ -329,7 +335,7 @@ if st.session_state["authentication_status"]:
                                     writer = csv.writer(file)
                                     writer.writerow([st.session_state.username, st.session_state.chat_id, message['turn_id'], feedback_radio_2,])
                                 st.success("Thanks! Your valuable feedback is updated in the database.")
-                    if context_radio == 'ข้อมูลประกาศ':
+                    if context_radio == button_name_list[0]:
                         with col3:
                             feedback_options = ["...",
                                                 "ประกาศถูกต้อง",
@@ -365,7 +371,7 @@ if st.session_state["authentication_status"]:
         # with st.chat_message("AI"):
         #     st.write("Hello 👋")
         if prompt := st.chat_input(placeholder="Kindly input your query or command for prompt assistance..."):
-                if context_radio == 'ข้อมูลประกาศ':
+                if context_radio == button_name_list[0]:
                     # Display user input in the chat
                     st.chat_message("user", avatar = user_image).write(prompt)
                     with st.spinner('Thinking...'):
@@ -406,7 +412,7 @@ if st.session_state["authentication_status"]:
                             st.session_state.context.append({"role": "system", "content": raw_output})
                             st.rerun()
 
-                elif context_radio == 'Datacube':
+                elif context_radio == button_name_list[1]:
                     # Display user input in the chat
                     st.chat_message("user", avatar = user_image).write(prompt)
                     with st.spinner('Thinking...'):
@@ -447,7 +453,7 @@ if st.session_state["authentication_status"]:
                         st.session_state.context.append({"role": "system", "content": raw_output})
                         st.rerun()
 
-                elif context_radio == 'Autogen':
+                elif context_radio == button_name_list[2]:
                     with st.spinner('Thinking...'):
                         response_dict = get_response_3(prompt, history = st.session_state.history)
                         st.session_state.history = response_dict['history']
