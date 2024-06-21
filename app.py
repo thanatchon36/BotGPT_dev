@@ -475,7 +475,11 @@ if st.session_state["authentication_status"]:
                                     message_placeholder.markdown(full_response + "▌")
                                     full_response += chunk + "  \n" 
                                     message_placeholder.markdown(full_response)
-                            st.session_state.messages.append({"role": "assistant", "content": response, "chat_id": st.session_state.chat_id, "turn_id":  st.session_state.chat_id + '_' + str(i),
+                            
+                            current_time = str(datetime.datetime.now())
+                            st.session_state.turn_id = current_time
+
+                            st.session_state.messages.append({"role": "assistant", "content": response, "chat_id": st.session_state.chat_id, "turn_id":  st.session_state.turn_id,
                                                             "raw_content": "",
                                                             })
                             st.session_state.context.append({"role": "system", "content": ""})
