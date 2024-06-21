@@ -457,6 +457,8 @@ if st.session_state["authentication_status"]:
                     Is_Human_Required = True
                     if Is_Human_Required == True:
                         st.chat_message("user", avatar = user_image).write(prompt)
+                        st.session_state.messages.append({"role": "user", "content": prompt, "raw_content": ""})
+                        st.session_state.context.append({"role": "user", "content": ""})
                     with st.spinner('Thinking...'):                        
                         while True:
                             response_dict = get_response_3(prompt, history = st.session_state.history)
@@ -477,10 +479,6 @@ if st.session_state["authentication_status"]:
                             
                             current_time = str(datetime.datetime.now())
                             st.session_state.turn_id = current_time
-
-                            if Is_Human_Required == False:
-                                st.session_state.messages.append({"role": "user", "content": prompt, "raw_content": ""})
-                                st.session_state.context.append({"role": "user", "content": ""})
                             
                             st.session_state.messages.append({"role": "assistant", "content": response, "chat_id": st.session_state.chat_id, "turn_id":  st.session_state.turn_id,
                                                             "raw_content": "",
