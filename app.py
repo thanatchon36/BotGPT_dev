@@ -454,6 +454,7 @@ if st.session_state["authentication_status"]:
                         st.rerun()
 
                 elif context_radio == button_name_list[2]:
+                    st.chat_message("user", avatar = user_image).write(prompt)
                     with st.spinner('Thinking...'):                        
                         while True:
                             response_dict = get_response_3(prompt, history = st.session_state.history)
