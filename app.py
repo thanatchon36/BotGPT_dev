@@ -454,11 +454,7 @@ if st.session_state["authentication_status"]:
                         st.rerun()
 
                 elif context_radio == button_name_list[2]:
-                    with st.spinner('Thinking...'):
-
-                        st.session_state.messages = []
-                        st.session_state.context = []
-                        
+                    with st.spinner('Thinking...'):                        
                         while True:
                             response_dict = get_response_3(prompt, history = st.session_state.history)
                             response = response_dict['response']['content']
