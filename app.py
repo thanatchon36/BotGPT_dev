@@ -461,8 +461,8 @@ if st.session_state["authentication_status"]:
                         
                         while True:
                             response_dict = get_response_3(prompt, history = st.session_state.history)
+                            response = response_dict['response']['content']
                             st.session_state.history = response_dict['history']
-                            full_response = response_dict['response']['content']
                             frontend_query_time = response_dict['frontend_query_time']
                             history_list = response_dict['history']
                             Is_Human_Required = response_dict['Is_Human_Required']
