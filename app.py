@@ -210,12 +210,14 @@ if st.session_state["authentication_status"]:
                                         if 'user' in each_dict['name'].lower():
                                             st.session_state.messages.append({"role": "user", "content": each_dict['content'], "raw_content": ""})
                                             st.session_state.context.append({"role": "user", "content": ""})
+                                            # st.chat_message("user", avatar = user_image).write(each_dict['content'])
                                         else:
                                             response = f"{each_dict['name']}: {each_dict['content']}"
                                             st.session_state.messages.append({"role": "assistant", "content": response, "chat_id": chat_id, "turn_id":  chat_id + '_' + str(i),
                                                                             "raw_content": "",
                                                                             })
                                             st.session_state.context.append({"role": "system", "content": ""})
+                                            # st.chat_message("assistant", avatar = bot_image_2).write(response)
 
                     if 'max_page' not in st.session_state:
                         st.session_state['max_page'] = 10
@@ -498,7 +500,7 @@ if st.session_state["authentication_status"]:
                             writer = csv.writer(file)
                             current_time = str(datetime.datetime.now())
                             st.session_state.turn_id = current_time
-                            writer.writerow([st.session_state.username, st.session_state.chat_id, st.session_state.turn_id, prompt, full_response, "", "", f"{button_name_list[2]}_gpt4o", frontend_query_time, "", response_dict['history'] ])
+                            writer.writerow([st.session_state.username, st.session_state.chat_id, st.session_state.turn_id, prompt, full_response, "", "", button_name_list[2] + '-gpt4o', frontend_query_time, "", response_dict['history'] ])
                         st.rerun()
 
 elif st.session_state["authentication_status"] == False:
