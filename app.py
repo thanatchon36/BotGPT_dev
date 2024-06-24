@@ -180,6 +180,8 @@ if st.session_state["authentication_status"]:
                     hist_df['page'] = hist_df['page'].astype(int)
                     hist_df['page'] = hist_df['page'] + 1
 
+                    fil_hist_df = full_hist_df.copy()
+
                     st.session_state['max_page'] = hist_df['page'].max()
 
                     filter_hist_df_2 = reset(hist_df[hist_df['page'] == st.session_state['page']])
@@ -197,7 +199,6 @@ if st.session_state["authentication_status"]:
                                 st.session_state.context = []
                                 st.session_state.chat_id = row['chat_id']
                                 st.session_state.turn_id = row['turn_id']
-                                fil_hist_df = full_hist_df.copy()
                                 fil_hist_df = reset(fil_hist_df[fil_hist_df['chat_id'] == row['chat_id']])
                                 if fil_hist_df['engine'].values[-1] != button_name_list[2]:
                                     for index_2, row_2 in fil_hist_df.iterrows():
