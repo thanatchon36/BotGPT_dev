@@ -36,10 +36,10 @@ def get_response_2(prompt, temperature, context = []):
     execution_time = time.time() - start_time
     execution_time = round(execution_time, 2)
     return {'response': res.json()['response'], 'raw_input': res.json()['raw_input'], 'raw_output': res.json()['raw_output'], 'engine': res.json()['engine'], 'frontend_query_time': execution_time, 'backend_query_time': res.json()['query_time_sec']}
-def get_response_3(message,history):
+def get_response_3(message, history, cube_list = []):
     start_time = time.time()
     url = 'https://pc140032645.bot.or.th/botgpt_query_autogen'
-    myobj = { "prompt": message, "history": history }
+    myobj = { "prompt": message, "history": history, 'cube':  cube_list}
     result = requests.post(url, json = myobj, verify = '/DA_WORKSPACE/GLOBAL_WS/ssl_cer/WS2A/pc140032645.bot.or.th.pem').json()
     execution_time = time.time() - start_time
     execution_time = round(execution_time, 2)
@@ -150,14 +150,39 @@ if st.session_state["authentication_status"]:
         context_radio = st.radio(
             "Context:",
             button_name_list
-            # ["button_name_list[0[", "Datacube", "Autogen"],
         )
 
-        temperature_value = st.slider(
-                'Select a temperature',
-                0.0, 1.0, 1.0, step=0.05
-                )
+        # temperature_value = st.slider(
+        #         'Select a temperature',
+        #         0.0, 1.0, 1.0, step=0.05
+        #         )
         
+        cube_1 = False
+        cube_1_1 = False
+        cube_3 = False
+        cube_4 = False
+        cube_5 = False
+        cube_6 = False
+        cube_7 = False
+        cube_8 = False
+        cube_8_1 = False
+        cube_9 = False
+        smart_cube = False
+
+        if context_radio == button_name_list[1] or context_radio == button_name_list[2]:
+            with st.expander("Select Cube"):
+                cube_1 = st.checkbox("Cube_1")
+                cube_1_1 = st.checkbox("Cube_1_1")
+                cube_3 = st.checkbox("Cube_3")
+                cube_4 = st.checkbox("Cube_4")
+                cube_5 = st.checkbox("Cube_5")
+                cube_6 = st.checkbox("Cube_6")
+                cube_7 = st.checkbox("Cube_7")
+                cube_8 = st.checkbox("Cube_8")
+                cube_8_1 = st.checkbox("Cube_8_1")
+                cube_9 = st.checkbox("Cube_9")
+                smart_cube = st.checkbox("Smart_cube")
+
         dev_checkbox = st.checkbox('Development')
         
         csv_file = f"data/{st.session_state.username}.csv"
@@ -467,7 +492,30 @@ if st.session_state["authentication_status"]:
                         st.session_state.context.append({"role": "user", "content": ""})
                     with st.spinner('Thinking...'):                        
                         while True:
-                            response_dict = get_response_3(prompt, history = st.session_state.history)
+                            cube_list = []
+                            if cube_1:
+                                cube_list.append('cube_1')
+                            if cube_1_1:
+                                cube_list.append('cube_1_1')
+                            if cube_3:
+                                cube_list.append('cube_3')
+                            if cube_4:
+                                cube_list.append('cube_4')
+                            if cube_5:
+                                cube_list.append('cube_5')
+                            if cube_6:
+                                cube_list.append('cube_6')
+                            if cube_7:
+                                cube_list.append('cube_7')
+                            if cube_8:
+                                cube_list.append('cube_8')
+                            if cube_8_1:
+                                cube_list.append('cube_8_1')
+                            if cube_9:
+                                cube_list.append('cube_9')
+                            if smart_cube:
+                                cube_list.append('smart_cube')
+                            response_dict = get_response_3(prompt, history = st.session_state.history, cube_list = cube_list)
                             response = response_dict['response']['content']
                             st.session_state.history = response_dict['history']
                             frontend_query_time = response_dict['frontend_query_time']
