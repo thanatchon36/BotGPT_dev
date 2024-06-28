@@ -565,7 +565,7 @@ if st.session_state["authentication_status"]:
                             writer = csv.writer(file)
                             current_time = str(datetime.datetime.now())
                             st.session_state.turn_id = current_time
-                            writer.writerow([st.session_state.username, st.session_state.chat_id, st.session_state.turn_id, prompt, full_response, "", "", button_name_list[2], frontend_query_time, "", response_dict['history'] ])
+                            writer.writerow([st.session_state.username, st.session_state.chat_id, st.session_state.turn_id, prompt, full_response, "", "", context_radio, frontend_query_time, "", response_dict['history'] ])
                         st.rerun()
 
 elif st.session_state["authentication_status"] == False:
