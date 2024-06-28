@@ -224,7 +224,7 @@ if st.session_state["authentication_status"]:
                                 st.session_state.chat_id = row['chat_id']
                                 st.session_state.turn_id = row['turn_id']
                                 fil_hist_df = reset(fil_hist_df[fil_hist_df['chat_id'] == row['chat_id']])
-                                if fil_hist_df['engine'].values[-1] != button_name_list[2]:
+                                if fil_hist_df['engine'].values[-1] == button_name_list[0]:
                                     for index_2, row_2 in fil_hist_df.iterrows():
                                         st.session_state.messages.append({"role": "user", "content": row_2['user_text'], "raw_content": row_2['raw_input']})
                                         st.session_state.messages.append({"role": "assistant", "content": row_2['generative_text'], "chat_id": row_2['chat_id'], "turn_id":  row_2['turn_id'],
@@ -442,48 +442,48 @@ if st.session_state["authentication_status"]:
                             st.session_state.context.append({"role": "system", "content": raw_output})
                             st.rerun()
 
-                elif context_radio == button_name_list[1]:
-                    # Display user input in the chat
-                    st.chat_message("user", avatar = user_image).write(prompt)
-                    with st.spinner('Thinking...'):
-                        response_dict = get_response_2(prompt, temperature_value, context = st.session_state.context)
-                        response = response_dict['response']
-                        raw_input = response_dict['raw_input']
-                        raw_output = response_dict['raw_output']
-                        engine = response_dict['engine']
-                        frontend_query_time = response_dict['frontend_query_time']
-                        backend_query_time = response_dict['backend_query_time']
+                # elif context_radio == button_name_list[1]:
+                #     # Display user input in the chat
+                #     st.chat_message("user", avatar = user_image).write(prompt)
+                #     with st.spinner('Thinking...'):
+                #         response_dict = get_response_2(prompt, temperature_value, context = st.session_state.context)
+                #         response = response_dict['response']
+                #         raw_input = response_dict['raw_input']
+                #         raw_output = response_dict['raw_output']
+                #         engine = response_dict['engine']
+                #         frontend_query_time = response_dict['frontend_query_time']
+                #         backend_query_time = response_dict['backend_query_time']
 
-                        with st.chat_message("assistant", avatar = bot_image_2):
-                            full_response = ""
-                            message_placeholder = st.empty()
-                            for chunk in response.split("\n"):
-                                time.sleep(0.05)
-                                message_placeholder.markdown(full_response + "▌")
-                                full_response += chunk + "  \n" 
-                                message_placeholder.markdown(full_response)
+                #         with st.chat_message("assistant", avatar = bot_image_2):
+                #             full_response = ""
+                #             message_placeholder = st.empty()
+                #             for chunk in response.split("\n"):
+                #                 time.sleep(0.05)
+                #                 message_placeholder.markdown(full_response + "▌")
+                #                 full_response += chunk + "  \n" 
+                #                 message_placeholder.markdown(full_response)
 
-                        csv_file = f"data/{st.session_state.username}.csv"
-                        file_exists = os.path.isfile(csv_file)
-                        if not file_exists:
-                            with open(csv_file, mode='a', newline='') as file:
-                                writer = csv.writer(file)
-                                writer.writerow(['username','chat_id','turn_id','user_text','generative_text','raw_input','raw_output','engine','frontend_query_time','backend_query_time','history'])
-                        with open(csv_file, mode='a', newline='', encoding = 'utf-8') as file:
-                            writer = csv.writer(file)
-                            current_time = str(datetime.datetime.now())
-                            st.session_state.turn_id = current_time
-                            writer.writerow([st.session_state.username, st.session_state.chat_id, st.session_state.turn_id, prompt, full_response, raw_input, raw_output, engine, frontend_query_time, backend_query_time, ""])
-                        # Add the assistant's response to the chat history
-                        st.session_state.messages.append({"role": "user", "content": prompt, "raw_content": raw_input})
-                        st.session_state.messages.append({"role": "assistant", "content": full_response, "chat_id": st.session_state.chat_id, "turn_id":  st.session_state.turn_id,
-                                                            "raw_content": raw_output,
-                                                            })
-                        st.session_state.context.append({"role": "user", "content": raw_input})
-                        st.session_state.context.append({"role": "system", "content": raw_output})
-                        st.rerun()
+                #         csv_file = f"data/{st.session_state.username}.csv"
+                #         file_exists = os.path.isfile(csv_file)
+                #         if not file_exists:
+                #             with open(csv_file, mode='a', newline='') as file:
+                #                 writer = csv.writer(file)
+                #                 writer.writerow(['username','chat_id','turn_id','user_text','generative_text','raw_input','raw_output','engine','frontend_query_time','backend_query_time','history'])
+                #         with open(csv_file, mode='a', newline='', encoding = 'utf-8') as file:
+                #             writer = csv.writer(file)
+                #             current_time = str(datetime.datetime.now())
+                #             st.session_state.turn_id = current_time
+                #             writer.writerow([st.session_state.username, st.session_state.chat_id, st.session_state.turn_id, prompt, full_response, raw_input, raw_output, engine, frontend_query_time, backend_query_time, ""])
+                #         # Add the assistant's response to the chat history
+                #         st.session_state.messages.append({"role": "user", "content": prompt, "raw_content": raw_input})
+                #         st.session_state.messages.append({"role": "assistant", "content": full_response, "chat_id": st.session_state.chat_id, "turn_id":  st.session_state.turn_id,
+                #                                             "raw_content": raw_output,
+                #                                             })
+                #         st.session_state.context.append({"role": "user", "content": raw_input})
+                #         st.session_state.context.append({"role": "system", "content": raw_output})
+                #         st.rerun()
 
-                elif context_radio == button_name_list[2]:
+                elif context_radio == button_name_list[1] or context_radio == button_name_list[2]:
                     Is_Human_Required = True
                     if Is_Human_Required == True:
                         st.chat_message("user", avatar = user_image).write(prompt)
