@@ -152,10 +152,10 @@ if st.session_state["authentication_status"]:
             button_name_list
         )
 
-        # temperature_value = st.slider(
-        #         'Select a temperature',
-        #         0.0, 1.0, 1.0, step=0.05
-        #         )
+        temperature_value = st.slider(
+                'Select a temperature',
+                0.0, 1.0, 1.0, step=0.05
+                )
         
         cube_1 = False
         cube_1_1 = False
@@ -182,7 +182,6 @@ if st.session_state["authentication_status"]:
                 cube_8_1 = st.checkbox("Cube_8_1")
                 cube_9 = st.checkbox("Cube_9")
                 smart_cube = st.checkbox("Smart_cube")
-
         dev_checkbox = st.checkbox('Development')
         
         csv_file = f"data/{st.session_state.username}.csv"
