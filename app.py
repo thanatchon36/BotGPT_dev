@@ -523,7 +523,10 @@ if st.session_state["authentication_status"]:
                                 cube_list.append('cube_9')
                             if smart_cube:
                                 cube_list.append('smart_cube')
-                            response_dict = get_response_3(prompt, history = st.session_state.history, cube_list = cube_list)
+                            if context_radio == button_name_list[1]:
+                                response_dict = get_response_2(prompt, history = st.session_state.history, cube_list = cube_list)
+                            elif context_radio == button_name_list[2]:
+                                response_dict = get_response_3(prompt, history = st.session_state.history, cube_list = cube_list)
                             response = response_dict['response']['content']
                             st.session_state.history = response_dict['history']
                             frontend_query_time = response_dict['frontend_query_time']
