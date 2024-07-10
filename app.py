@@ -54,6 +54,15 @@ def get_response_3(message, history, cube_list = []):
     execution_time = round(execution_time, 2)
     result['frontend_query_time'] = execution_time
     return result
+def get_response_4(message, history, cube_list = []):
+    start_time = time.time()
+    url = 'https://pc140032645.bot.or.th/rdt_brainstroming'
+    myobj = { "prompt": message, "history": history, 'cube':  cube_list}
+    result = requests.post(url, json = myobj, verify = '/DA_WORKSPACE/GLOBAL_WS/ssl_cer/WS2A/pc140032645.bot.or.th.pem').json()
+    execution_time = time.time() - start_time
+    execution_time = round(execution_time, 2)
+    result['frontend_query_time'] = execution_time
+    return result
 def get_response_dev(prompt, temperature, context = []):
     start_time = time.time()
     time.sleep(3)
@@ -130,7 +139,8 @@ authenticator = stauth.Authenticate(
 
 authenticator.login('BotGPT Login', 'main')
 
-button_name_list = ["BOTGPT",
+button_name_list = ["RDT Brainstroming",
+                    "BOTGPT",
                     "RDT Copilot - Metadata",
                     "RDT Copilot - SQL Coder",
                     ]
@@ -178,7 +188,7 @@ if st.session_state["authentication_status"]:
         cube_9 = False
         smart_cube = False
 
-        if context_radio == button_name_list[1] or context_radio == button_name_list[2]:
+        if context_radio == button_name_list[2] or context_radio == button_name_list[3] or context_radio == button_name_list[0]:
             with st.expander("Select Cube"):
                 cube_1 = st.checkbox("Cube_1")
                 cube_1_1 = st.checkbox("Cube_1_1")
@@ -221,7 +231,7 @@ if st.session_state["authentication_status"]:
 
                     for index, row in filter_hist_df_2.iterrows():
                         if st.session_state.chat_id != row['chat_id']:
-                            if fil_hist_df['engine'].values[-1] != button_name_list[2]:
+                            if fil_hist_df['engine'].values[-1] != button_name_list[3]:
                                 chat_button_click = st.button(f"{row['user_text'][:30]}" + '...', key = row['chat_id'])
                             else:
                                 history_list = literal_eval(fil_hist_df['history'].values[-1])
@@ -233,7 +243,7 @@ if st.session_state["authentication_status"]:
                                 st.session_state.chat_id = row['chat_id']
                                 st.session_state.turn_id = row['turn_id']
                                 fil_hist_df = reset(fil_hist_df[fil_hist_df['chat_id'] == row['chat_id']])
-                                if fil_hist_df['engine'].values[-1] == button_name_list[0]:
+                                if fil_hist_df['engine'].values[-1] == button_name_list[1]:
                                     for index_2, row_2 in fil_hist_df.iterrows():
                                         st.session_state.messages.append({"role": "user", "content": row_2['user_text'], "raw_content": row_2['raw_input']})
                                         st.session_state.messages.append({"role": "assistant", "content": row_2['generative_text'], "chat_id": row_2['chat_id'], "turn_id":  row_2['turn_id'],
@@ -313,7 +323,7 @@ if st.session_state["authentication_status"]:
                 else:
                     st.markdown(message["content"])
                     col1, col2, col3 = st.columns(3)
-                    if context_radio != button_name_list[2]:
+                    if context_radio != button_name_list[3]:
                         with col1:
                             feedback_options = ["...",
                                                 "😄", 
@@ -338,26 +348,19 @@ if st.session_state["authentication_status"]:
                                     writer.writerow([st.session_state.username, st.session_state.chat_id, message['turn_id'], feedback_radio_1,])
                                 st.success("Thanks! Your valuable feedback is updated in the database.")
                         with col2:
-                            if context_radio == button_name_list[0]:
+                            if context_radio == button_name_list[1]:
                                 feedback_options = ["...",
                                                     "คำตอบถูกต้องครบถ้วน",
                                                     "คำตอบถูกต้องบางส่วน",
                                                     "คำตอบไม่ถูกต้อง",
                                                     "คำตอบไม่เกี่ยวข้องกับคำถาม"]
-                            elif context_radio == button_name_list[1]:
+                            elif context_radio == button_name_list[2]:
                                 feedback_options = ["...",
                                                     "เลือก field ผิด",
                                                     "เลือก field ถูกแต่ไม่ครบถ้วน",
                                                     "เลือก field ถูกแต่ SQL ไม่ตอบโจทย์",
                                                     "เลือก field ถูกแต่ SQL syntax ผิด",
                                                     "ผลลัพธ์ถูกต้อง"]
-                            # elif context_radio == button_name_list[2]:
-                            #     feedback_options = ["...",
-                            #                         "เลือก field ผิด",
-                            #                         "เลือก field ถูกแต่ไม่ครบถ้วน",
-                            #                         "เลือก field ถูกแต่ SQL ไม่ตอบโจทย์",
-                            #                         "เลือก field ถูกแต่ SQL syntax ผิด",
-                            #                         "ผลลัพธ์ถูกต้อง"]
                             feedback_radio_2 = st.radio(
                                                 "ความถูกต้องของคำตอบ:",
                                                 feedback_options,
@@ -374,7 +377,7 @@ if st.session_state["authentication_status"]:
                                     writer = csv.writer(file)
                                     writer.writerow([st.session_state.username, st.session_state.chat_id, message['turn_id'], feedback_radio_2,])
                                 st.success("Thanks! Your valuable feedback is updated in the database.")
-                    if context_radio == button_name_list[0]:
+                    if context_radio == button_name_list[1]:
                         with col3:
                             feedback_options = ["...",
                                                 "ประกาศถูกต้อง",
@@ -410,7 +413,7 @@ if st.session_state["authentication_status"]:
         # with st.chat_message("AI"):
         #     st.write("Hello 👋")
         if prompt := st.chat_input(placeholder="Kindly input your query or command for prompt assistance..."):
-                if context_radio == button_name_list[0]:
+                if context_radio == button_name_list[1]:
                     # Display user input in the chat
                     st.chat_message("user", avatar = user_image).write(prompt)
                     with st.spinner('Thinking...'):
@@ -492,7 +495,7 @@ if st.session_state["authentication_status"]:
                 #         st.session_state.context.append({"role": "system", "content": raw_output})
                 #         st.rerun()
 
-                elif context_radio == button_name_list[1] or context_radio == button_name_list[2]:
+                elif context_radio == button_name_list[2] or context_radio == button_name_list[3] or context_radio == button_name_list[0]:
                     Is_Human_Required = True
                     if Is_Human_Required == True:
                         st.chat_message("user", avatar = user_image).write(prompt)
@@ -523,10 +526,12 @@ if st.session_state["authentication_status"]:
                                 cube_list.append('cube_9')
                             if smart_cube:
                                 cube_list.append('smart_cube')
-                            if context_radio == button_name_list[1]:
+                            if context_radio == button_name_list[2]:
                                 response_dict = get_response_2(prompt, history = st.session_state.history, cube_list = cube_list)
-                            elif context_radio == button_name_list[2]:
+                            elif context_radio == button_name_list[3]:
                                 response_dict = get_response_3(prompt, history = st.session_state.history, cube_list = cube_list)
+                            elif context_radio == button_name_list[0]:
+                                response_dict = get_response_4(prompt, history = st.session_state.history, cube_list = cube_list)
                             response = response_dict['response']['content']
                             st.session_state.history = response_dict['history']
                             frontend_query_time = response_dict['frontend_query_time']
