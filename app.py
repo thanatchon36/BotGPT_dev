@@ -15,12 +15,12 @@ import random
 
 def get_response(prompt, temperature, context = []):
     start_time = time.time()
-    api_route = 'botgpt_query_dev'
+    api_route = 'metadata_dev'
     post_params = {'prompt': f"{prompt}",
                    'context': context,
                    'temperature': temperature,
                 }
-    res = requests.post(f'https://pc140032646.bot.or.th/{api_route}', json = post_params, verify="/DA_WORKSPACE/GLOBAL_WS/ssl_cer/WS2B/pc140032646.bot.or.th.pem")
+    res = requests.post(f'https://pc140034433.bot.or.th/{api_route}', json = post_params, verify="/DA_WORKSPACE/GLOBAL_WS/ssl_cer/WS2B/pc140032646.bot.or.th.pem")
     execution_time = time.time() - start_time
     execution_time = round(execution_time, 2)
     return {'response': res.json()['response'], 'raw_input': res.json()['raw_input'], 'raw_output': res.json()['raw_output'], 'engine': res.json()['engine'], 'frontend_query_time': execution_time, 'backend_query_time': res.json()['query_time_sec']}
@@ -47,7 +47,7 @@ def get_response_2(message, history, cube_list = []):
     # return {'response': res.json()['response'], 'raw_input': res.json()['raw_input'], 'raw_output': res.json()['raw_output'], 'engine': res.json()['engine'], 'frontend_query_time': execution_time, 'backend_query_time': res.json()['query_time_sec']}
 def get_response_3(message, history, cube_list = []):
     start_time = time.time()
-    url = 'https://pc140032645.bot.or.th/botgpt_query_autogen'
+    url = 'https://pc140034433.bot.or.th/botgpt_query_autogen'
     myobj = { "prompt": message, "history": history, 'cube':  cube_list}
     result = requests.post(url, json = myobj, verify = '/DA_WORKSPACE/GLOBAL_WS/ssl_cer/WS2A/pc140032645.bot.or.th.pem').json()
     execution_time = time.time() - start_time
@@ -56,7 +56,7 @@ def get_response_3(message, history, cube_list = []):
     return result
 def get_response_4(message, history, cube_list = []):
     start_time = time.time()
-    url = 'https://pc140032645.bot.or.th/rdt_brainstroming'
+    url = 'https://pc140034433.bot.or.th/rdt_brainstroming'
     myobj = { "prompt": message, "history": history, 'cube':  cube_list}
     result = requests.post(url, json = myobj, verify = '/DA_WORKSPACE/GLOBAL_WS/ssl_cer/WS2A/pc140032645.bot.or.th.pem').json()
     execution_time = time.time() - start_time
