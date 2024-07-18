@@ -47,7 +47,7 @@ def get_response_4(message, history, cube_list = []):
     start_time = time.time()
     url = 'https://pc140034433.bot.or.th/botgpt_query_autogen'
     myobj = { "prompt": message, "history": history, 'cube':  cube_list}
-    result = requests.post(url, json = myobj, verify = '/DA_WORKSPACE/GLOBAL_WS/ssl_cer/WS2A/pc140032645.bot.or.th.pem').json()
+    result = requests.post(url, json = myobj, verify = False).json()
     execution_time = time.time() - start_time
     execution_time = round(execution_time, 2)
     result['frontend_query_time'] = execution_time
