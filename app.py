@@ -140,7 +140,7 @@ authenticator = stauth.Authenticate(
 authenticator.login('BotGPT Login', 'main')
 
 button_name_list = ["RDT Brainstroming",
-                    "BOTGPT",
+                    # "BOTGPT",
                     "RDT Copilot - Metadata",
                     "RDT Copilot - SQL Coder",
                     ]
@@ -413,52 +413,11 @@ if st.session_state["authentication_status"]:
         # with st.chat_message("AI"):
         #     st.write("Hello 👋")
         if prompt := st.chat_input(placeholder="Kindly input your query or command for prompt assistance..."):
-                if context_radio == button_name_list[1]:
-                    # Display user input in the chat
-                    st.chat_message("user", avatar = user_image).write(prompt)
-                    with st.spinner('Thinking...'):
-                        response_dict = get_response(prompt, temperature_value, context = st.session_state.context)
-                        response = response_dict['response']
-                        raw_input = response_dict['raw_input']
-                        raw_output = response_dict['raw_output']
-                        engine = response_dict['engine']
-                        frontend_query_time = response_dict['frontend_query_time']
-                        backend_query_time = response_dict['backend_query_time']
-
-                        with st.chat_message("assistant", avatar = bot_image_2):
-                            full_response = ""
-                            message_placeholder = st.empty()
-                            for chunk in response.split("\n"):
-                                time.sleep(0.05)
-                                message_placeholder.markdown(full_response + "▌")
-                                full_response += chunk + "  \n" 
-                                message_placeholder.markdown(full_response)
-
-                        csv_file = f"data/{st.session_state.username}.csv"
-                        file_exists = os.path.isfile(csv_file)
-                        if not file_exists:
-                            with open(csv_file, mode='a', newline='') as file:
-                                writer = csv.writer(file)
-                                writer.writerow(['username','chat_id','turn_id','user_text','generative_text','raw_input','raw_output','engine','frontend_query_time','backend_query_time','history'])
-                        with open(csv_file, mode='a', newline='', encoding = 'utf-8') as file:
-                            writer = csv.writer(file)
-                            current_time = str(datetime.datetime.now())
-                            st.session_state.turn_id = current_time
-                            writer.writerow([st.session_state.username, st.session_state.chat_id, st.session_state.turn_id, prompt, full_response, raw_input, raw_output, engine, frontend_query_time, backend_query_time, ""])
-                        # Add the assistant's response to the chat history
-                            st.session_state.messages.append({"role": "user", "content": prompt, "raw_content": raw_input})
-                            st.session_state.messages.append({"role": "assistant", "content": full_response, "chat_id": st.session_state.chat_id, "turn_id":  st.session_state.turn_id,
-                                                                "raw_content": raw_output,
-                                                                })
-                            st.session_state.context.append({"role": "user", "content": raw_input})
-                            st.session_state.context.append({"role": "system", "content": raw_output})
-                            st.rerun()
-
-                # elif context_radio == button_name_list[1]:
+                # if context_radio == button_name_list[1]:
                 #     # Display user input in the chat
                 #     st.chat_message("user", avatar = user_image).write(prompt)
                 #     with st.spinner('Thinking...'):
-                #         response_dict = get_response_2(prompt, temperature_value, context = st.session_state.context)
+                #         response_dict = get_response(prompt, temperature_value, context = st.session_state.context)
                 #         response = response_dict['response']
                 #         raw_input = response_dict['raw_input']
                 #         raw_output = response_dict['raw_output']
@@ -487,91 +446,90 @@ if st.session_state["authentication_status"]:
                 #             st.session_state.turn_id = current_time
                 #             writer.writerow([st.session_state.username, st.session_state.chat_id, st.session_state.turn_id, prompt, full_response, raw_input, raw_output, engine, frontend_query_time, backend_query_time, ""])
                 #         # Add the assistant's response to the chat history
-                #         st.session_state.messages.append({"role": "user", "content": prompt, "raw_content": raw_input})
-                #         st.session_state.messages.append({"role": "assistant", "content": full_response, "chat_id": st.session_state.chat_id, "turn_id":  st.session_state.turn_id,
-                #                                             "raw_content": raw_output,
-                #                                             })
-                #         st.session_state.context.append({"role": "user", "content": raw_input})
-                #         st.session_state.context.append({"role": "system", "content": raw_output})
-                #         st.rerun()
+                #             st.session_state.messages.append({"role": "user", "content": prompt, "raw_content": raw_input})
+                #             st.session_state.messages.append({"role": "assistant", "content": full_response, "chat_id": st.session_state.chat_id, "turn_id":  st.session_state.turn_id,
+                #                                                 "raw_content": raw_output,
+                #                                                 })
+                #             st.session_state.context.append({"role": "user", "content": raw_input})
+                #             st.session_state.context.append({"role": "system", "content": raw_output})
+                #             st.rerun()
+                # elif context_radio == button_name_list[2] or context_radio == button_name_list[3] or context_radio == button_name_list[0]:
+                Is_Human_Required = True
+                if Is_Human_Required == True:
+                    st.chat_message("user", avatar = user_image).write(prompt)
+                    st.session_state.messages.append({"role": "user", "content": prompt, "raw_content": ""})
+                    st.session_state.context.append({"role": "user", "content": ""})
+                with st.spinner('Thinking...'):                        
+                    while True:
+                        cube_list = []
+                        if cube_1:
+                            cube_list.append('cube_1')
+                        if cube_1_1:
+                            cube_list.append('cube_1_1')
+                        if cube_3:
+                            cube_list.append('cube_3')
+                        if cube_4:
+                            cube_list.append('cube_4')
+                        if cube_5:
+                            cube_list.append('cube_5')
+                        if cube_6:
+                            cube_list.append('cube_6')
+                        if cube_7:
+                            cube_list.append('cube_7')
+                        if cube_8:
+                            cube_list.append('cube_8')
+                        if cube_8_1:
+                            cube_list.append('cube_8_1')
+                        if cube_9:
+                            cube_list.append('cube_9')
+                        if smart_cube:
+                            cube_list.append('smart_cube')
+                        if context_radio == button_name_list[0]:
+                            response_dict = get_response_4(prompt, history = st.session_state.history, cube_list = cube_list)
+                        elif context_radio == button_name_list[1]:
+                            response_dict = get_response(prompt, history = st.session_state.history, cube_list = cube_list)
+                        elif context_radio == button_name_list[2]:
+                            response_dict = get_response_3(prompt, history = st.session_state.history, cube_list = cube_list)
+                        response = response_dict['response']['content']
+                        st.session_state.history = response_dict['history']
+                        frontend_query_time = response_dict['frontend_query_time']
+                        history_list = response_dict['history']
+                        Is_Human_Required = response_dict['Is_Human_Required']
 
-                elif context_radio == button_name_list[2] or context_radio == button_name_list[3] or context_radio == button_name_list[0]:
-                    Is_Human_Required = True
-                    if Is_Human_Required == True:
-                        st.chat_message("user", avatar = user_image).write(prompt)
-                        st.session_state.messages.append({"role": "user", "content": prompt, "raw_content": ""})
-                        st.session_state.context.append({"role": "user", "content": ""})
-                    with st.spinner('Thinking...'):                        
-                        while True:
-                            cube_list = []
-                            if cube_1:
-                                cube_list.append('cube_1')
-                            if cube_1_1:
-                                cube_list.append('cube_1_1')
-                            if cube_3:
-                                cube_list.append('cube_3')
-                            if cube_4:
-                                cube_list.append('cube_4')
-                            if cube_5:
-                                cube_list.append('cube_5')
-                            if cube_6:
-                                cube_list.append('cube_6')
-                            if cube_7:
-                                cube_list.append('cube_7')
-                            if cube_8:
-                                cube_list.append('cube_8')
-                            if cube_8_1:
-                                cube_list.append('cube_8_1')
-                            if cube_9:
-                                cube_list.append('cube_9')
-                            if smart_cube:
-                                cube_list.append('smart_cube')
-                            if context_radio == button_name_list[2]:
-                                response_dict = get_response_2(prompt, history = st.session_state.history, cube_list = cube_list)
-                            elif context_radio == button_name_list[3]:
-                                response_dict = get_response_3(prompt, history = st.session_state.history, cube_list = cube_list)
-                            elif context_radio == button_name_list[0]:
-                                response_dict = get_response_4(prompt, history = st.session_state.history, cube_list = cube_list)
-                            response = response_dict['response']['content']
-                            st.session_state.history = response_dict['history']
-                            frontend_query_time = response_dict['frontend_query_time']
-                            history_list = response_dict['history']
-                            Is_Human_Required = response_dict['Is_Human_Required']
+                        with st.chat_message("assistant", avatar = bot_image_2):
+                            full_response = ""
+                            message_placeholder = st.empty()
+                            for chunk in response.split("\n"):
+                                time.sleep(0.05)
+                                message_placeholder.markdown(full_response + "▌")
+                                full_response += chunk + "  \n" 
+                                message_placeholder.markdown(full_response)
+                        
+                        current_time = str(datetime.datetime.now())
+                        st.session_state.turn_id = current_time
+                        
+                        st.session_state.messages.append({"role": "assistant", "content": response, "chat_id": st.session_state.chat_id, "turn_id":  st.session_state.turn_id,
+                                                        "raw_content": "",
+                                                        })
+                        st.session_state.context.append({"role": "system", "content": ""})
 
-                            with st.chat_message("assistant", avatar = bot_image_2):
-                                full_response = ""
-                                message_placeholder = st.empty()
-                                for chunk in response.split("\n"):
-                                    time.sleep(0.05)
-                                    message_placeholder.markdown(full_response + "▌")
-                                    full_response += chunk + "  \n" 
-                                    message_placeholder.markdown(full_response)
-                            
-                            current_time = str(datetime.datetime.now())
-                            st.session_state.turn_id = current_time
-                            
-                            st.session_state.messages.append({"role": "assistant", "content": response, "chat_id": st.session_state.chat_id, "turn_id":  st.session_state.turn_id,
-                                                            "raw_content": "",
-                                                            })
-                            st.session_state.context.append({"role": "system", "content": ""})
+                        if Is_Human_Required == True or response == "":
+                            break
+                        else:
+                            prompt = " "
 
-                            if Is_Human_Required == True or response == "":
-                                break
-                            else:
-                                prompt = " "
-
-                        csv_file = f"data/{st.session_state.username}.csv"
-                        file_exists = os.path.isfile(csv_file)
-                        if not file_exists:
-                            with open(csv_file, mode='a', newline='') as file:
-                                writer = csv.writer(file)
-                                writer.writerow(['username','chat_id','turn_id','user_text','generative_text','raw_input','raw_output','engine','frontend_query_time','backend_query_time','history'])
-                        with open(csv_file, mode='a', newline='', encoding = 'utf-8') as file:
+                    csv_file = f"data/{st.session_state.username}.csv"
+                    file_exists = os.path.isfile(csv_file)
+                    if not file_exists:
+                        with open(csv_file, mode='a', newline='') as file:
                             writer = csv.writer(file)
-                            current_time = str(datetime.datetime.now())
-                            st.session_state.turn_id = current_time
-                            writer.writerow([st.session_state.username, st.session_state.chat_id, st.session_state.turn_id, prompt, full_response, "", "", context_radio, frontend_query_time, "", response_dict['history'] ])
-                        st.rerun()
+                            writer.writerow(['username','chat_id','turn_id','user_text','generative_text','raw_input','raw_output','engine','frontend_query_time','backend_query_time','history'])
+                    with open(csv_file, mode='a', newline='', encoding = 'utf-8') as file:
+                        writer = csv.writer(file)
+                        current_time = str(datetime.datetime.now())
+                        st.session_state.turn_id = current_time
+                        writer.writerow([st.session_state.username, st.session_state.chat_id, st.session_state.turn_id, prompt, full_response, "", "", context_radio, frontend_query_time, "", response_dict['history'] ])
+                    st.rerun()
 
 elif st.session_state["authentication_status"] == False:
     st.error("Username/password is incorrect. If you encounter any issues related to user login, please contact Thanatchon Chongmankhong at thanatcc@bot.or.th.")
