@@ -140,7 +140,6 @@ authenticator = stauth.Authenticate(
 authenticator.login('BotGPT Login', 'main')
 
 button_name_list = ["RDT Brainstroming",
-                    # "BOTGPT",
                     "RDT Copilot - Metadata",
                     "RDT Copilot - SQL Coder",
                     ]
@@ -188,19 +187,18 @@ if st.session_state["authentication_status"]:
         cube_9 = False
         smart_cube = False
 
-        if context_radio == button_name_list[2] or context_radio == button_name_list[3] or context_radio == button_name_list[0]:
-            with st.expander("Select Cube"):
-                cube_1 = st.checkbox("Cube_1")
-                cube_1_1 = st.checkbox("Cube_1_1")
-                cube_3 = st.checkbox("Cube_3")
-                cube_4 = st.checkbox("Cube_4")
-                cube_5 = st.checkbox("Cube_5")
-                cube_6 = st.checkbox("Cube_6")
-                cube_7 = st.checkbox("Cube_7")
-                cube_8 = st.checkbox("Cube_8")
-                cube_8_1 = st.checkbox("Cube_8_1")
-                cube_9 = st.checkbox("Cube_9")
-                smart_cube = st.checkbox("Smart_cube")
+        with st.expander("Select Cube"):
+            cube_1 = st.checkbox("Cube_1")
+            cube_1_1 = st.checkbox("Cube_1_1")
+            cube_3 = st.checkbox("Cube_3")
+            cube_4 = st.checkbox("Cube_4")
+            cube_5 = st.checkbox("Cube_5")
+            cube_6 = st.checkbox("Cube_6")
+            cube_7 = st.checkbox("Cube_7")
+            cube_8 = st.checkbox("Cube_8")
+            cube_8_1 = st.checkbox("Cube_8_1")
+            cube_9 = st.checkbox("Cube_9")
+            smart_cube = st.checkbox("Smart_cube")
         dev_checkbox = st.checkbox('Development')
         
         csv_file = f"data/{st.session_state.username}.csv"
@@ -231,7 +229,7 @@ if st.session_state["authentication_status"]:
 
                     for index, row in filter_hist_df_2.iterrows():
                         if st.session_state.chat_id != row['chat_id']:
-                            if fil_hist_df['engine'].values[-1] != button_name_list[3]:
+                            if fil_hist_df['engine'].values[-1] != button_name_list[2]:
                                 chat_button_click = st.button(f"{row['user_text'][:30]}" + '...', key = row['chat_id'])
                             else:
                                 history_list = literal_eval(fil_hist_df['history'].values[-1])
@@ -323,7 +321,7 @@ if st.session_state["authentication_status"]:
                 else:
                     st.markdown(message["content"])
                     col1, col2, col3 = st.columns(3)
-                    if context_radio != button_name_list[3]:
+                    if context_radio != button_name_list[2]:
                         with col1:
                             feedback_options = ["...",
                                                 "😄", 
