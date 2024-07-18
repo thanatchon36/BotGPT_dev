@@ -13,41 +13,30 @@ import requests
 from ast import literal_eval
 import random
 
-def get_response(prompt, temperature, context = []):
-    start_time = time.time()
-    api_route = 'metadata_dev'
-    post_params = {'prompt': f"{prompt}",
-                   'context': context,
-                   'temperature': temperature,
-                }
-    res = requests.post(f'https://pc140034433.bot.or.th/{api_route}', json = post_params, verify=False)
-    execution_time = time.time() - start_time
-    execution_time = round(execution_time, 2)
-    return {'response': res.json()['response'], 'raw_input': res.json()['raw_input'], 'raw_output': res.json()['raw_output'], 'engine': res.json()['engine'], 'frontend_query_time': execution_time, 'backend_query_time': res.json()['query_time_sec']}
+# def get_response(prompt, temperature, context = []):
+#     start_time = time.time()
+#     api_route = 'metadata_dev'
+#     post_params = {'prompt': f"{prompt}",
+#                    'context': context,
+#                    'temperature': temperature,
+#                 }
+#     res = requests.post(f'https://pc140034433.bot.or.th/{api_route}', json = post_params, verify=False)
+#     execution_time = time.time() - start_time
+#     execution_time = round(execution_time, 2)
+#     return {'response': res.json()['response'], 'raw_input': res.json()['raw_input'], 'raw_output': res.json()['raw_output'], 'engine': res.json()['engine'], 'frontend_query_time': execution_time, 'backend_query_time': res.json()['query_time_sec']}
 
-# def get_response_2(prompt, temperature, context = []):
 def get_response_2(message, history, cube_list = []):
-    # start_time = time.time()
-    # api_route = 'botgpt_query_dev'
-    # post_params = {'prompt': f"{prompt}",
-    #                'context': context,
-    #                'temperature': temperature,
-    #             }
-    # res = requests.post(f'https://pc140032645.bot.or.th/{api_route}', json = post_params, verify="/DA_WORKSPACE/GLOBAL_WS/ssl_cer/WS2A/pc140032645.bot.or.th.pem")
-    # execution_time = time.time() - start_time
-    # execution_time = round(execution_time, 2)
     start_time = time.time()
-    url = 'https://pc140032645.bot.or.th/botgpt_query_dev'
+    url = 'https://pc140034433.bot.or.th/rdt_brainstroming'
     myobj = { "prompt": message, "history": history, 'cube':  cube_list}
     result = requests.post(url, json = myobj, verify = False).json()
     execution_time = time.time() - start_time
     execution_time = round(execution_time, 2)
     result['frontend_query_time'] = execution_time
     return result
-    # return {'response': res.json()['response'], 'raw_input': res.json()['raw_input'], 'raw_output': res.json()['raw_output'], 'engine': res.json()['engine'], 'frontend_query_time': execution_time, 'backend_query_time': res.json()['query_time_sec']}
 def get_response_3(message, history, cube_list = []):
     start_time = time.time()
-    url = 'https://pc140034433.bot.or.th/botgpt_query_autogen'
+    url = 'https://pc140034433.bot.or.th/metadata_dev'
     myobj = { "prompt": message, "history": history, 'cube':  cube_list}
     result = requests.post(url, json = myobj, verify = False).json()
     execution_time = time.time() - start_time
@@ -56,7 +45,7 @@ def get_response_3(message, history, cube_list = []):
     return result
 def get_response_4(message, history, cube_list = []):
     start_time = time.time()
-    url = 'https://pc140034433.bot.or.th/rdt_brainstroming'
+    url = 'https://pc140034433.bot.or.th/botgpt_query_autogen'
     myobj = { "prompt": message, "history": history, 'cube':  cube_list}
     result = requests.post(url, json = myobj, verify = '/DA_WORKSPACE/GLOBAL_WS/ssl_cer/WS2A/pc140032645.bot.or.th.pem').json()
     execution_time = time.time() - start_time
@@ -478,11 +467,11 @@ if st.session_state["authentication_status"]:
                         if smart_cube:
                             cube_list.append('smart_cube')
                         if context_radio == button_name_list[0]:
-                            response_dict = get_response_4(prompt, history = st.session_state.history, cube_list = cube_list)
+                            response_dict = get_response_2(prompt, history = st.session_state.history, cube_list = cube_list)
                         elif context_radio == button_name_list[1]:
-                            response_dict = get_response(prompt, history = st.session_state.history, cube_list = cube_list)
-                        elif context_radio == button_name_list[2]:
                             response_dict = get_response_3(prompt, history = st.session_state.history, cube_list = cube_list)
+                        elif context_radio == button_name_list[2]:
+                            response_dict = get_response_4(prompt, history = st.session_state.history, cube_list = cube_list)
                         response = response_dict['response']['content']
                         st.session_state.history = response_dict['history']
                         frontend_query_time = response_dict['frontend_query_time']
