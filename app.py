@@ -237,7 +237,7 @@ if st.session_state["authentication_status"]:
                                     else:
                                         response = f"{each_dict['name']}: {each_dict['content']}"
                                         st.session_state.messages.append({"role": "assistant", "content": response, "chat_id": chat_id, "turn_id":  chat_id + '_' + str(i),
-                                                                        "raw_content": "",
+                                                                        "raw_content": "", "agent_name": each_dict['agent_name'],
                                                                         })
                                         st.session_state.context.append({"role": "assistant", "content": ""})
 
