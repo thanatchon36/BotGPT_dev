@@ -237,7 +237,7 @@ if st.session_state["authentication_status"]:
                                     else:
                                         response = f"{each_dict['name']}: {each_dict['content']}"
                                         st.session_state.messages.append({"role": "assistant", "content": response, "chat_id": chat_id, "turn_id":  chat_id + '_' + str(i),
-                                                                        "raw_content": "", "agent_name": each_dict['agent_name'],
+                                                                        "raw_content": "", "agent_name": each_dict['name'],
                                                                         })
                                         st.session_state.context.append({"role": "assistant", "content": ""})
 
@@ -448,7 +448,7 @@ if st.session_state["authentication_status"]:
                 writer = csv.writer(file)
                 current_time = str(datetime.datetime.now())
                 st.session_state.turn_id = current_time
-                writer.writerow([st.session_state.username, st.session_state.chat_id, st.session_state.turn_id, prompt, full_response, "", "", context_radio, frontend_query_time, "", response_dict['history'], agent_name])
+                writer.writerow([st.session_state.username, st.session_state.chat_id, st.session_state.turn_id, prompt, full_response, "", "", context_radio, frontend_query_time, "", response_dict['history']])
             st.rerun()
 
 elif st.session_state["authentication_status"] == False:
