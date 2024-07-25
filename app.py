@@ -290,7 +290,11 @@ if st.session_state["authentication_status"]:
     # Display chat messages from history on app rerun
     for message_i, message in enumerate(st.session_state.messages):
         if message["role"] == "assistant":
-            with st.expander("..."):
+            if message['agent_name'] == "cube_analyst":
+                with st.expander("cube_analyst"):
+                    with st.chat_message(message["role"], avatar = bot_image_2):
+                        st.markdown(message["content"])
+            else:
                 with st.chat_message(message["role"], avatar = bot_image_2):
                     st.markdown(message["content"])
                 # col1, col2, col3 = st.columns(3)
@@ -398,20 +402,34 @@ if st.session_state["authentication_status"]:
                 history_list = response_dict['history']
                 Is_Human_Required = response_dict['Is_Human_Required']
 
-                with st.chat_message("assistant", avatar = bot_image_2):
-                    full_response = ""
-                    message_placeholder = st.empty()
-                    for chunk in response.split("\n"):
-                        time.sleep(0.05)
-                        message_placeholder.markdown(full_response + "▌")
-                        full_response += chunk + "  \n" 
-                        message_placeholder.markdown(full_response)
+                agent_name = response_dict['response']['name']
+                
+                if agent_name == 'cube_analyst':
+                    with st.expander("cube_analyst"):
+                        with st.chat_message("assistant", avatar = bot_image_2):
+                            full_response = ""
+                            message_placeholder = st.empty()
+                            for chunk in response.split("\n"):
+                                time.sleep(0.05)
+                                message_placeholder.markdown(full_response + "▌")
+                                full_response += chunk + "  \n" 
+                                message_placeholder.markdown(full_response)
+                else:
+                    with st.chat_message("assistant", avatar = bot_image_2):
+                        full_response = ""
+                        message_placeholder = st.empty()
+                        for chunk in response.split("\n"):
+                            time.sleep(0.05)
+                            message_placeholder.markdown(full_response + "▌")
+                            full_response += chunk + "  \n" 
+                            message_placeholder.markdown(full_response)
                 
                 current_time = str(datetime.datetime.now())
                 st.session_state.turn_id = current_time
                 
                 st.session_state.messages.append({"role": "assistant", "content": response, "chat_id": st.session_state.chat_id, "turn_id":  st.session_state.turn_id,
                                                 "raw_content": "",
+                                                "agent_name": agent_name,
                                                 })
                 st.session_state.context.append({"role": "system", "content": ""})
 
@@ -425,12 +443,12 @@ if st.session_state["authentication_status"]:
             if not file_exists:
                 with open(csv_file, mode='a', newline='') as file:
                     writer = csv.writer(file)
-                    writer.writerow(['username','chat_id','turn_id','user_text','generative_text','raw_input','raw_output','engine','frontend_query_time','backend_query_time','history'])
+                    writer.writerow(['username','chat_id','turn_id','user_text','generative_text','raw_input','raw_output','engine','frontend_query_time','backend_query_time','history','agent_name'])
             with open(csv_file, mode='a', newline='', encoding = 'utf-8') as file:
                 writer = csv.writer(file)
                 current_time = str(datetime.datetime.now())
                 st.session_state.turn_id = current_time
-                writer.writerow([st.session_state.username, st.session_state.chat_id, st.session_state.turn_id, prompt, full_response, "", "", context_radio, frontend_query_time, "", response_dict['history'] ])
+                writer.writerow([st.session_state.username, st.session_state.chat_id, st.session_state.turn_id, prompt, full_response, "", "", context_radio, frontend_query_time, "", response_dict['history'], agent_name])
             st.rerun()
 
 elif st.session_state["authentication_status"] == False:
