@@ -133,6 +133,8 @@ button_name_list = ["RDT Brainstroming",
                     "RDT Copilot - SQL Coder",
                     ]
 
+hidden_agent_name_list = ["cube_analyst", "information_gathering_agent"]
+
 if st.session_state["authentication_status"]:
     
     if "chat_id" not in st.session_state:
@@ -290,8 +292,8 @@ if st.session_state["authentication_status"]:
     # Display chat messages from history on app rerun
     for message_i, message in enumerate(st.session_state.messages):
         if message["role"] == "assistant":
-            if message['agent_name'] == "cube_analyst":
-                with st.expander("cube_analyst"):
+            if message['agent_name'] in hidden_agent_name_list:
+                with st.expander(message['agent_name']):
                     with st.chat_message(message["role"], avatar = bot_image_2):
                         st.markdown(message["content"])
             else:
@@ -404,8 +406,8 @@ if st.session_state["authentication_status"]:
 
                 agent_name = response_dict['response']['name']
                 
-                if agent_name == 'cube_analyst':
-                    with st.expander("cube_analyst"):
+                if agent_name in hidden_agent_name_list:
+                    with st.expander(agent_name):
                         with st.chat_message("assistant", avatar = bot_image_2):
                             full_response = ""
                             message_placeholder = st.empty()
