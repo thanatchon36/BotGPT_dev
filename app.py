@@ -445,7 +445,7 @@ if st.session_state["authentication_status"]:
             if not file_exists:
                 with open(csv_file, mode='a', newline='') as file:
                     writer = csv.writer(file)
-                    writer.writerow(['username','chat_id','turn_id','user_text','generative_text','raw_input','raw_output','engine','frontend_query_time','backend_query_time','history','agent_name'])
+                    writer.writerow(['username','chat_id','turn_id','user_text','generative_text','raw_input','raw_output','engine','frontend_query_time','backend_query_time','history'])
             with open(csv_file, mode='a', newline='', encoding = 'utf-8') as file:
                 writer = csv.writer(file)
                 current_time = str(datetime.datetime.now())
