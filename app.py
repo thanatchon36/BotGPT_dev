@@ -128,7 +128,7 @@ authenticator = stauth.Authenticate(
 
 authenticator.login('BotGPT Login', 'main')
 
-button_name_list = ["RDT Brainstroming",
+button_name_list = ["RDT Brainstorming",
                     "RDT Copilot - Metadata",
                     "RDT Copilot - SQL Coder",
                     ]
@@ -161,10 +161,10 @@ if st.session_state["authentication_status"]:
             button_name_list
         )
 
-        temperature_value = st.slider(
-                'Select a temperature',
-                0.0, 1.0, 1.0, step=0.05
-                )
+        # temperature_value = st.slider(
+        #         'Select a temperature',
+        #         0.0, 1.0, 1.0, step=0.05
+        #         )
         
         cube_1 = False
         cube_1_1 = False
