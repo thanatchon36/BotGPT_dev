@@ -157,7 +157,7 @@ if st.session_state["authentication_status"]:
             st.session_state.history = []
 
         context_radio = st.radio(
-            "Context:",
+            "Task:",
             button_name_list
         )
 
