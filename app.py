@@ -133,7 +133,7 @@ button_name_list = ["RDT Brainstorming",
                     "RDT Copilot - SQL Coder",
                     ]
 
-hidden_agent_name_list = ["cube_analyst", "information_gathering_agent"]
+hidden_agent_name_list = ["cube_analyst", "information_gathering_agent", "cube_selector_assistant"]
 
 if st.session_state["authentication_status"]:
     
