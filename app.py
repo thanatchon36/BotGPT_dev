@@ -24,7 +24,7 @@ def get_response_2(message, history, cube_list = []):
     return result
 def get_response_3(message, history, cube_list = []):
     start_time = time.time()
-    url = 'https://pc140034433.bot.or.th/metadata_dev'
+    url = 'https://pc140034433.bot.or.th/metadata'
     myobj = { "prompt": message, "history": history, 'cube':  cube_list}
     result = requests.post(url, json = myobj, verify = False).json()
     execution_time = time.time() - start_time
