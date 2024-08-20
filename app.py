@@ -17,7 +17,7 @@ def get_response_2(message, history, cube_list = []):
     start_time = time.time()
     url = 'https://pc140034433.bot.or.th/rdt_brainstorming'
     myobj = { "prompt": message, "history": history, 'cube':  cube_list}
-    result = requests.post(url, json = myobj, verify = False).json()
+    result = requests.post(url, json = myobj, verify = False, timeout = 60).json()
     execution_time = time.time() - start_time
     execution_time = round(execution_time, 2)
     result['frontend_query_time'] = execution_time
@@ -26,7 +26,7 @@ def get_response_3(message, history, cube_list = []):
     start_time = time.time()
     url = 'https://pc140034433.bot.or.th/metadata'
     myobj = { "prompt": message, "history": history, 'cube':  cube_list}
-    result = requests.post(url, json = myobj, verify = False).json()
+    result = requests.post(url, json = myobj, verify = False, timeout = 60).json()
     execution_time = time.time() - start_time
     execution_time = round(execution_time, 2)
     result['frontend_query_time'] = execution_time
@@ -35,7 +35,7 @@ def get_response_4(message, history, cube_list = []):
     start_time = time.time()
     url = 'https://pc140034433.bot.or.th/botgpt_query_autogen'
     myobj = { "prompt": message, "history": history, 'cube':  cube_list}
-    result = requests.post(url, json = myobj, verify = False).json()
+    result = requests.post(url, json = myobj, verify = False, timeout = 60).json()
     execution_time = time.time() - start_time
     execution_time = round(execution_time, 2)
     result['frontend_query_time'] = execution_time
@@ -121,7 +121,7 @@ button_name_list = ["RDT Brainstorming",
                     "RDT Copilot - SQL Coder",
                     ]
 
-hidden_agent_name_list = ["cube_analyst", "information_gathering_agent", "cube_selector_assistant"]
+hidden_agent_name_list = ["cube_analyst", "information_gathering_agent", "cube_selector_assistant","cube_selector_assistant_selected_cube"]
 
 if st.session_state["authentication_status"]:
     
@@ -154,6 +154,7 @@ if st.session_state["authentication_status"]:
         #         0.0, 1.0, 1.0, step=0.05
         #         )
         
+        smart_cube_1 = False
         cube_1 = False
         cube_1_1 = False
         cube_3 = False
@@ -164,9 +165,9 @@ if st.session_state["authentication_status"]:
         cube_8 = False
         cube_8_1 = False
         cube_9 = False
-        smart_cube = False
-
-        with st.expander("Select Cube"):
+        
+        with st.expander("Select Cube", expanded = True):
+            smart_cube_1 = st.checkbox("Smart_cube_1", value = True)
             cube_1 = st.checkbox("Cube_1")
             cube_1_1 = st.checkbox("Cube_1_1")
             cube_3 = st.checkbox("Cube_3")
@@ -177,7 +178,7 @@ if st.session_state["authentication_status"]:
             cube_8 = st.checkbox("Cube_8")
             cube_8_1 = st.checkbox("Cube_8_1")
             cube_9 = st.checkbox("Cube_9")
-            smart_cube = st.checkbox("Smart_cube")
+            
         # dev_checkbox = st.checkbox('Development')
         
         csv_file = f"data/{st.session_state.username}.csv"
@@ -358,6 +359,8 @@ if st.session_state["authentication_status"]:
         with st.spinner('Thinking...'):                        
             while True:
                 cube_list = []
+                if smart_cube_1:
+                    cube_list.append('smart_cube_1')
                 if cube_1:
                     cube_list.append('cube_1')
                 if cube_1_1:
@@ -378,8 +381,6 @@ if st.session_state["authentication_status"]:
                     cube_list.append('cube_8_1')
                 if cube_9:
                     cube_list.append('cube_9')
-                if smart_cube:
-                    cube_list.append('smart_cube')
                 if context_radio == button_name_list[0]:
                     response_dict = get_response_2(prompt, history = st.session_state.history, cube_list = cube_list)
                 elif context_radio == button_name_list[1]:
@@ -390,7 +391,7 @@ if st.session_state["authentication_status"]:
                 st.session_state.history = response_dict['history']
                 frontend_query_time = response_dict['frontend_query_time']
                 history_list = response_dict['history']
-                Is_Human_Required = response_dict['Is_Human_Required']
+                Is_Human_Required = response_dict['is_human_required']
 
                 agent_name = response_dict['response']['name']
                 
