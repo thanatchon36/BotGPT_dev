@@ -360,7 +360,7 @@ if st.session_state["authentication_status"]:
             st.session_state.context.append({"role": "user", "content": ""})
         with st.spinner('Thinking...'):
             st.chat_input(placeholder="Kindly input your query or command for prompt assistance...", disabled=True, key = 2)  # Use a unique key for each chat input
-            i = 0                
+            i = 0
             while True:
                 cube_list = []
                 if smart_cube_1:
