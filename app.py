@@ -351,8 +351,7 @@ if st.session_state["authentication_status"]:
         # with st.chat_message("AI"):
         #     st.write("Hello 👋")
     
-    prompt = st.chat_input(placeholder = "Kindly input your query or command for prompt assistance...", disabled = False, key = 1)
-    # if prompt := st.chat_input(placeholder="Kindly input your query or command for prompt assistance...", disabled = False):
+    prompt = st.chat_input(placeholder="Kindly input your query or command for prompt assistance...", disabled=False, key = 1)
     if prompt:
         Is_Human_Required = True
         if Is_Human_Required == True:
@@ -360,7 +359,7 @@ if st.session_state["authentication_status"]:
             st.session_state.messages.append({"role": "user", "content": prompt, "raw_content": ""})
             st.session_state.context.append({"role": "user", "content": ""})
         with st.spinner('Thinking...'):
-            prompt = st.chat_input(placeholder = "Kindly input your query or command for prompt assistance...", disabled = True, key = 2)
+            st.chat_input(placeholder="Kindly input your query or command for prompt assistance...", disabled=True, key = 2)  # Use a unique key for each chat input
             i = 0                
             while True:
                 cube_list = []
@@ -451,7 +450,9 @@ if st.session_state["authentication_status"]:
                 writer.writerow([st.session_state.username, st.session_state.chat_id, st.session_state.turn_id, prompt, full_response, "", "", context_radio, frontend_query_time, "", response_dict['history']])
             st.rerun()
 
-        prompt = st.chat_input(placeholder = "Kindly input your query or command for prompt assistance...", disabled = False, key = 3)
+        st.chat_input(placeholder="Kindly input your query or command for prompt assistance...", disabled=False, key = 3)
+
+        st.rerun()
 
 elif st.session_state["authentication_status"] == False:
     st.error("Username/password is incorrect. If you encounter any issues related to user login, please contact Thanatchon Chongmankhong at thanatcc@bot.or.th.")
