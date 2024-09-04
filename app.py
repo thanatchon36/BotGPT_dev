@@ -129,6 +129,25 @@ if st.session_state["authentication_status"]:
         now = str(datetime.datetime.now())
         st.session_state.chat_id  = now
         st.session_state.history = []
+    
+    c1, c2 = st.columns((5, 1))
+    with c2:
+        @st.dialog("Submit your feedback")
+        def vote(item):
+            feedback_type = st.radio("Feedback type",
+                ["Suggestion", "Troubleshooting"],
+                horizontal = True
+            )
+            reason = st.text_input("Feeback Detail...")
+            if st.button("Submit"):
+                st.session_state.vote = {"feedback_type": feedback_type, "reason": reason}
+                st.rerun()
+
+        if "vote" not in st.session_state:
+            if st.button("Feeback"):
+                vote("Feeback")
+        else:
+            f"You feedback has been submitted ✅"
 
     bot_image = Image.open('fav.png')
     bot_image_2 = Image.open('fav_3.png')
