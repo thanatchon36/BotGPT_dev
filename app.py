@@ -17,7 +17,7 @@ def get_response_2(message, history, cube_list = []):
     start_time = time.time()
     url = 'https://pc140034433.bot.or.th/rdt_brainstorming'
     myobj = { "prompt": message, "history": history, 'cube':  cube_list}
-    result = requests.post(url, json = myobj, verify = False, timeout = 120).json()
+    result = requests.post(url, json = myobj, verify = False, timeout = 300).json()
     execution_time = time.time() - start_time
     execution_time = round(execution_time, 2)
     result['frontend_query_time'] = execution_time
@@ -26,7 +26,7 @@ def get_response_3(message, history, cube_list = []):
     start_time = time.time()
     url = 'https://pc140034433.bot.or.th/metadata'
     myobj = { "prompt": message, "history": history, 'cube':  cube_list}
-    result = requests.post(url, json = myobj, verify = False, timeout = 120).json()
+    result = requests.post(url, json = myobj, verify = False, timeout = 300).json()
     execution_time = time.time() - start_time
     execution_time = round(execution_time, 2)
     result['frontend_query_time'] = execution_time
@@ -35,7 +35,7 @@ def get_response_4(message, history, cube_list = []):
     start_time = time.time()
     url = 'https://pc140034433.bot.or.th/botgpt_query_autogen'
     myobj = { "prompt": message, "history": history, 'cube':  cube_list}
-    result = requests.post(url, json = myobj, verify = False, timeout = 120).json()
+    result = requests.post(url, json = myobj, verify = False, timeout = 300).json()
     execution_time = time.time() - start_time
     execution_time = round(execution_time, 2)
     result['frontend_query_time'] = execution_time
@@ -85,7 +85,6 @@ def get_response_dev_2(message, history):
 def reset(df):
     cols = df.columns
     return df.reset_index()[cols]
-
 
 def popup_message(message, duration=3):
     """
@@ -147,6 +146,8 @@ if st.session_state["authentication_status"]:
             now = str(datetime.datetime.now())
             st.session_state.chat_id  = now
             st.session_state.history = []
+
+            st.session_state.reset = True
 
         context_radio = st.radio(
             "Task:",
@@ -241,15 +242,21 @@ if st.session_state["authentication_status"]:
                     if int(st.session_state['max_page']) > 1:
                         page = st.slider('Page No:', 1, int(st.session_state['max_page']), key = 'page')
 
+        if "reset" not in st.session_state:
+            st.session_state.reset = False
+
         with st.expander("Report / Feedback"):
-            # Chat_ID = st.markdown("Chat ID:", unsafe_allow_html=True)
-            # st.code(st.session_state.chat_id, language="python")
+            if "example" not in st.session_state:
+                st.session_state.example = "DEFAULT_NUMBER"
+                
             feedback_chat_id = st.text_input("Chat ID", st.session_state.chat_id)
             feedback_type = st.radio(
                 "Type",
                 ['Suggestion', 'Troubleshooting']
             )
-            feedback_text = st.text_area("Detail...", "")
+            text = st.empty()
+            feedback_text = text.text_area("Detail...", value = "", key = st.session_state.chat_id + "_1")
+            
             submit_button = st.button("Submit")
 
             if submit_button:
@@ -263,8 +270,9 @@ if st.session_state["authentication_status"]:
                     writer = csv.writer(file)
                     writer.writerow([st.session_state.username, st.session_state.chat_id, feedback_type, feedback_text,])
                 st.success('Your feedback has been submitted!')
-
-
+                time.sleep(2)
+                text.text_area("Detail...", value= "", key = st.session_state.chat_id + "_2")
+                
         with st.expander("Change Password"):
             try:
                 if authenticator.reset_password(st.session_state["username"], 'Reset password'):
