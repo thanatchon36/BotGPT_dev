@@ -12,7 +12,6 @@ from yaml.loader import SafeLoader
 import requests
 from ast import literal_eval
 import random
-import pyperclip
 
 def get_response_2(message, history, cube_list = []):
     start_time = time.time()
